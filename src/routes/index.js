@@ -3,15 +3,17 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+require('dotenv').config();
 
-var usersRouter = require('../module/client/clientRoutes');
-var clientRouter = require('../module/user/users');
+var clientRouter = require('../module/client/clientRoutes');
+var employeRouter = require('../module/employe/employeRoutes');
+var serviceRouter = require('../module/service/serviceRoutes');
 
 var app = express();
 // const MongoClient = require('mongodb').MongoClient
 const mongoose = require('mongoose');
 
-const connectionString = "mongodb+srv://salon:beaute@cluster0.bjohxyg.mongodb.net/?retryWrites=true&w=majority"
+const connectionString = process.env.DB_URL;
 
 // MongoClient.connect(connectionString)
 //   .then(client => {
@@ -28,7 +30,8 @@ mongoose.connect(connectionString, {dbName: 'salondebeaute'})
 
 app.use(express.json());
 app.use(clientRouter);
-app.use(usersRouter);
+app.use(employeRouter);
+app.use(serviceRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

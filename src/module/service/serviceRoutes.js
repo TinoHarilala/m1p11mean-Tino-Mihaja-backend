@@ -1,0 +1,17 @@
+var express = require('express');
+const ServiceController = require('./ServiceController');
+var router = express.Router();
+
+const serviceController = new ServiceController();
+
+/* Create Service. */
+router.post('/create.service', serviceController.create);
+
+/* Get Service. */
+router.get('/get.service', serviceController.get);
+
+router.get('/service/:id', serviceController.findById);
+
+router.post('/update.service', serviceController.update);
+
+module.exports = router;

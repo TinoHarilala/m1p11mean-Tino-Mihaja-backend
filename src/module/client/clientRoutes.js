@@ -4,10 +4,10 @@ var router = express.Router();
 
 const clientController = new ClientController();
 
-/* GET home page. */
+/* POST Login client. */
 router.post('/login', clientController.login);
 
-/* GET users listing. */
+/* POST Inscription client. */
 router.post('/registration', clientController.registrate);
 
 module.exports = router;
