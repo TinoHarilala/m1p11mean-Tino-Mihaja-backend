@@ -18,7 +18,7 @@ class ServiceController {
 
     async get(req, res) {
         try {
-            const services = await Service.find({});
+            const services = await Service.find({'isDeleted': 0});
 
             res.status(200).json({ service: services });
         } catch (error) {
@@ -47,6 +47,19 @@ class ServiceController {
         } catch (error) {
             console.log(error);
             res.status(401).json({error: error});
+        }
+    }
+
+    async delete(req, res) {
+        try {
+            const serv = await Service.findById({ _id: req.params.id });
+            serv.isDeleted = 1;
+            const service = await Service.findByIdAndUpdate(serv._id, serv, { new: true });
+
+            res.status(200).json({ message: "Suppression avec succès" });
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({ error: error });
         }
     }
 }

@@ -12,5 +12,10 @@ router.post('/registration.employe', employeController.registrate);
 
 router.get('/get.employe', employeController.getEmployes);
 
+router.get('/employe/:id', employeController.findById);
+
+router.post('/update.employe', employeController.update);
+
+router.get('/delete.employe/:id', employeController.delete);
 
 module.exports = router;

@@ -14,4 +14,6 @@ router.get('/service/:id', serviceController.findById);
 
 router.post('/update.service', serviceController.update);
 
+router.get('/delete.service/:id', serviceController.delete);
+
 module.exports = router;

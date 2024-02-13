@@ -9,7 +9,8 @@ const EmployeSchema = new Schema({
     password: { type: String, required: true },
     adresse: { type: String, required: true }, 
     services: [{ type: Schema.Types.ObjectId, ref:'Service', required: false }],
-    isManager: { type: Number, required: false, default: 0 }
+    isManager: { type: Number, required: true, default: 0 },
+    isDeleted: {type: Number, required: true, default: 0}
 });
 
 const Employe = model("Employe", EmployeSchema);
