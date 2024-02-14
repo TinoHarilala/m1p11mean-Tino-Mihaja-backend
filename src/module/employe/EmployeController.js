@@ -1,8 +1,11 @@
 const Employe = require('./EmployeModel');
 const EmployeService = require('./EmployeService');
 const { secret_code, Middleware } = require('../../middleware/index');
+const HoraireTravail = require('../horaireTravail/HoraireTravailModel');
+const HoraireTravailService = require('../horaireTravail/HoraireTravailService');
 
 const employeService = new EmployeService();
+const horaireTravailService = new HoraireTravailService();
 const middleware = new Middleware();
 
 class EmployeController {
@@ -21,10 +24,14 @@ class EmployeController {
 
     async registrate(req, res) {
         try {
-            const employeReg = new Employe({ ...req.body });
-            const employe = await employeService.registration(employeReg);
+            const reqBodyEmp = new Employe({ ...req.body.employe });
+            const employe = await employeService.registration(reqBodyEmp);
 
-            res.status(200).json({ message: "Registration succes", employe: employe });
+            const reqBodyWorking = new HoraireTravail({ ...req.body.workingHours });
+            reqBodyWorking.employe = employe._id;
+            const wh = await (await horaireTravailService.create(reqBodyWorking));
+
+            res.status(200).json({ message: "Registration succes", employe: employe, workingHours: wh });
         } catch (error) {
             console.log(error);
             res.status(401).json({ error: "Registration failed" });
@@ -33,7 +40,7 @@ class EmployeController {
 
     async getEmployes(req, res) {
         try {
-            const employe = await Employe.find({'isDeleted': 0}).populate('services');
+            const employe = await Employe.find({'isDeleted': 0, 'isManager': 0}).populate('services');
             
             res.status(200).json({ employe: employe });
         } catch (error) {
@@ -44,9 +51,10 @@ class EmployeController {
 
     async findById(req, res) {
         try {
-            const employe = await Employe.findById({_id: req.params.id});
+            const employe = await Employe.findById({ _id: req.params.id }).populate('services');
+            const wh = await HoraireTravail.find({ 'employe': employe._id });
 
-            res.status(200).json({ employe: employe });
+            res.status(200).json({ employe: employe, workingHours: wh });
         } catch (error) {
             console.log(error);
             res.status(401).json({error: error});
@@ -55,10 +63,14 @@ class EmployeController {
 
     async update(req, res) {
         try {
-            const employeReg = new Employe({ ...req.body });
-            const employe = await Employe.findByIdAndUpdate(employeReg._id, employeReg, { new: true });
+            const reqBodyWorking = new HoraireTravail({ ...req.body.workingHours });
+            const reqBodyEmp = new Employe({ ...req.body.employe });
+            const employe = await Employe.findByIdAndUpdate(reqBodyEmp._id, reqBodyEmp, { new: true });
+            reqBodyWorking.employe = employe._id;
 
-            res.status(200).json({ employe: employe });
+            const wh = await horaireTravailService.update(reqBodyWorking);
+
+            res.status(200).json({ employe: employe, workingHours: wh });
         } catch (error) {
             console.log(error);
             res.status(401).json({ error: error });
@@ -71,7 +83,7 @@ class EmployeController {
             emp.isDeleted = 1;
             const employe = await Employe.findByIdAndUpdate(emp._id, emp, { new: true });
 
-            res.status(200).json({ message: "Suppression avec succès" });
+            res.status(200).json({ message: "Successful deletion" });
         } catch (error) {
             console.log(error);
             res.status(401).json({ error: error });

@@ -9,7 +9,7 @@ class EmployeService {
             });
 
             if (!employeLog || !(await bcrypt.compare(employe.password, employeLog.password))) {
-                throw new Error('Identifiants invalides');
+                throw new Error('Invalid identifiers');
             }
 
             return employeLog;
@@ -28,12 +28,12 @@ class EmployeService {
                 const cl = await Employe.create(employe);
                 return cl;
             } else {
-                throw new Error("Le mot de passe est indéfini ou nul");
+                throw new Error("Password is undefined or null");
             }
              
         } catch (error) {
             console.log(error);
-            throw new Error("L'inscription a échoué dans le service");
+            throw new Error("Registration failed in the service");
         }
     }
 }

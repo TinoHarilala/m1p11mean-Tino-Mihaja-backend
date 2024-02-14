@@ -8,6 +8,7 @@ require('dotenv').config();
 var clientRouter = require('../module/client/clientRoutes');
 var employeRouter = require('../module/employe/employeRoutes');
 var serviceRouter = require('../module/service/serviceRoutes');
+var preferenceRouter = require('../module/preference/preferenceRoutes')
 
 var app = express();
 // const MongoClient = require('mongodb').MongoClient
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use(clientRouter);
 app.use(employeRouter);
 app.use(serviceRouter);
+app.use(preferenceRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

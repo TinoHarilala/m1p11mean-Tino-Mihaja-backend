@@ -56,7 +56,7 @@ class ServiceController {
             serv.isDeleted = 1;
             const service = await Service.findByIdAndUpdate(serv._id, serv, { new: true });
 
-            res.status(200).json({ message: "Suppression avec succès" });
+            res.status(200).json({ message: "Successful deletion" });
         } catch (error) {
             console.log(error);
             res.status(401).json({ error: error });
