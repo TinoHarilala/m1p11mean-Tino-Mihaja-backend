@@ -89,6 +89,17 @@ class EmployeController {
             res.status(401).json({ error: error });
         }
     }
+
+    async getEmployesByService(req, res) {
+        try {
+            const employe = await Employe.find({ 'services': req.params.idService , 'isDeleted': 0, 'isManager': 0});
+
+            res.status(200).json({ employe: employe });
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({error: error});
+        }
+    }
 }
 
 module.exports = EmployeController;

@@ -1,3 +1,4 @@
+const Employe = require("../employe/EmployeModel");
 const Service = require("./ServiceModel");
 
 
@@ -18,9 +19,16 @@ class ServiceController {
 
     async get(req, res) {
         try {
-            const services = await Service.find({'isDeleted': 0});
+            const services = await Service.find({ 'isDeleted': 0 });
+            
+            const resultatsPromises = services.map(async (service) => {
+                const employe = await Employe.find({ 'services': service._id , 'isDeleted': 0, 'isManager': 0});
+                return { ...service.toObject(), employe };
+            });
 
-            res.status(200).json({ service: services });
+            const resultats = await Promise.all(resultatsPromises);
+
+            res.status(200).json({ service: resultats });
         } catch (error) {
             console.log(error);
             res.status(401).json({ error: error });

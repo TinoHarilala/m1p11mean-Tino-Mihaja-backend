@@ -18,4 +18,7 @@ router.post('/update.employe', employeController.update);
 
 router.get('/delete.employe/:id', employeController.delete);
 
+router.get('/employe.service/:idService', employeController.getEmployesByService);
+
+
 module.exports = router;
