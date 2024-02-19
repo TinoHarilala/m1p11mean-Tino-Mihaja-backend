@@ -9,6 +9,7 @@ var clientRouter = require('../module/client/clientRoutes');
 var employeRouter = require('../module/employe/employeRoutes');
 var serviceRouter = require('../module/service/serviceRoutes');
 var preferenceRouter = require('../module/preference/preferenceRoutes')
+var rendezVousRouter = require('../module/rendez-vous/rendezVousRoutes')
 
 var app = express();
 // const MongoClient = require('mongodb').MongoClient
@@ -34,6 +35,7 @@ app.use(clientRouter);
 app.use(employeRouter);
 app.use(serviceRouter);
 app.use(preferenceRouter);
+app.use(rendezVousRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

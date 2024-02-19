@@ -6,8 +6,8 @@ const RendezVousEmployeSchema = new Schema({
     date: { type: Date, required: true }, 
     startTime: { type: Date, required: true }, 
     endTime: { type: Date, required: true }, 
-    service: { type: Schema.Types.ObjectId, ref:'Service', required: false },
-    idEmploye: { type: Schema.Types.ObjectId, ref:'Employe', required: false },
+    service: { type: Schema.Types.ObjectId, ref:'Service', required: true },
+    idEmploye: { type: Schema.Types.ObjectId, ref:'Employe', required: true },
     done: {type: Number, required: true, default: 0},
     commission: {type: Number, required: true, default: 0}
 });
