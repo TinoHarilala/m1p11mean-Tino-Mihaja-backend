@@ -6,6 +6,7 @@ const ServiceSchema = new Schema({
     duree: { type: Number, required: true },
     commission: { type: Number, required: true},
     description: { type: String, required: false },
+    image: { type: String, required: false },
     isDeleted: {type: Number, required: true, default: 0}
 });
 

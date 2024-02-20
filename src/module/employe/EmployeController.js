@@ -29,7 +29,7 @@ class EmployeController {
 
             const reqBodyWorking = new HoraireTravail({ ...req.body.workingHours });
             reqBodyWorking.employe = employe._id;
-            const wh = await (await horaireTravailService.create(reqBodyWorking));
+            const wh = await horaireTravailService.create(reqBodyWorking);
 
             res.status(200).json({ message: "Registration succes", employe: employe, workingHours: wh });
         } catch (error) {
