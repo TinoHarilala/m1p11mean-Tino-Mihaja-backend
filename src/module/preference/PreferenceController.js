@@ -12,7 +12,7 @@ class PreferenceController {
             res.status(200).json({ Preference: preferences });
         } catch (error) {
             console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 
@@ -23,7 +23,7 @@ class PreferenceController {
             res.status(200).json({ Preference: preferences });
         } catch (error) {
             console.log(error);
-            res.status(401).json({ error: error });
+            res.status(401).json({ error: error.message });
         }
     }
 
@@ -34,7 +34,7 @@ class PreferenceController {
             res.status(200).json({ Preference: preference });
         } catch (error) {
             console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 
@@ -46,7 +46,7 @@ class PreferenceController {
             res.status(200).json({ Preference: pref });
         } catch (error) {
             console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 
@@ -59,7 +59,7 @@ class PreferenceController {
             res.status(200).json({ message: "Successful deletion" });
         } catch (error) {
             console.log(error);
-            res.status(401).json({ error: error });
+            res.status(401).json({ error: error.message });
         }
     }
 }

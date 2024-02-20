@@ -15,10 +15,10 @@ class EmployeController {
             const employeLog = new Employe({ ...req.body });
             const employe = await employeService.authentification(employeLog);
             const token = middleware.createToken(employe);
+
             res.status(200).json({ token: token, employe: employe });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({ error: error });
+            res.status(401).json({ error: error.message });
         }
     }
 
@@ -33,8 +33,7 @@ class EmployeController {
 
             res.status(200).json({ message: "Registration succes", employe: employe, workingHours: wh });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({ error: "Registration failed" });
+            res.status(401).json({ error: error.message });
         }
     }
 
@@ -44,8 +43,7 @@ class EmployeController {
             
             res.status(200).json({ employe: employe });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 
@@ -57,7 +55,7 @@ class EmployeController {
             res.status(200).json({ employe: employe, workingHours: wh });
         } catch (error) {
             console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 
@@ -73,7 +71,7 @@ class EmployeController {
             res.status(200).json({ employe: employe, workingHours: wh });
         } catch (error) {
             console.log(error);
-            res.status(401).json({ error: error });
+            res.status(401).json({ error: error.message });
         }
     }
 
@@ -86,7 +84,7 @@ class EmployeController {
             res.status(200).json({ message: "Successful deletion" });
         } catch (error) {
             console.log(error);
-            res.status(401).json({ error: error });
+            res.status(401).json({ error: error.message });
         }
     }
 
@@ -97,7 +95,7 @@ class EmployeController {
             res.status(200).json({ employe: employe });
         } catch (error) {
             console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 }

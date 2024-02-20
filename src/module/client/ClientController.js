@@ -14,8 +14,7 @@ class ClientController {
             const token = middleware.createToken(client);
             res.status(200).json({ token: token, client: client});
         } catch (error) {
-            console.log(error);
-            res.status(401).json({ error: error });
+            res.status(401).json({ error: error.message });
         }
     }
 
@@ -26,8 +25,7 @@ class ClientController {
 
             res.status(200).json({ message: "Registration succes", client: client });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({ error: "Registration failed" });
+            res.status(401).json({ error: error.message });
         }
     }
 }

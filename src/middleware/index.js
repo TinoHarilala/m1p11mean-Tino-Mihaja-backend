@@ -6,12 +6,12 @@ class Middleware {
     async checkToken(req, token) {
         if (req.originalUrl !== "/login" && req.originalUrl !== "/registration") {
             if (!token) {
-                throw new Error("Session expiré");
+                throw new Error("Session expired");
             } else {
                 try {
-                const check = verify(token, secret_code);
+                  const check = verify(token, secret_code);
                 } catch (error) {
-                throw error;
+                  throw error;
                 }
             }
         } else {

@@ -1,37 +1,29 @@
 const Employe = require("../employe/EmployeModel");
 const Service = require("./ServiceModel");
+const ServiceService = require("./ServiceService");
 
+const serviceService = new ServiceService();
 
 class ServiceController {
 
     async create(req, res) {
         try {
-            const service = new Service({ ...req.body });
-            const serv = await Service.create(service);
-            const services = await Service.find({});
+            const service = new Service({ ...req.body.service });
+            const services = await serviceService.create(service, req.body.employe);
 
             res.status(200).json({ service: services });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 
     async get(req, res) {
         try {
-            const services = await Service.find({ 'isDeleted': 0 });
-            
-            const resultatsPromises = services.map(async (service) => {
-                const employe = await Employe.find({ 'services': service._id , 'isDeleted': 0, 'isManager': 0});
-                return { ...service.toObject(), employe };
-            });
-
-            const resultats = await Promise.all(resultatsPromises);
+            const resultats = await serviceService.get();
 
             res.status(200).json({ service: resultats });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({ error: error });
+            res.status(401).json({ error: error.message });
         }
     }
 
@@ -41,8 +33,7 @@ class ServiceController {
 
             res.status(200).json({ service: service });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 
@@ -53,8 +44,7 @@ class ServiceController {
 
             res.status(200).json({ service: serv });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({error: error});
+            res.status(401).json({error: error.message});
         }
     }
 
@@ -66,8 +56,7 @@ class ServiceController {
 
             res.status(200).json({ message: "Successful deletion" });
         } catch (error) {
-            console.log(error);
-            res.status(401).json({ error: error });
+            res.status(401).json({ error: error.message });
         }
     }
 }

@@ -4,6 +4,35 @@ const RendezVousClient = require('./RendezVousClient');
 const RendezVousEmploye = require('./RendezVousEmploye');
 
 class RendezVousService {
+    async indisponibilite(idService) {
+        try {
+            const nbEmploye = await Employe.find({ 'services': idService, 'isDeleted': 0, 'isManager': 0 }).countDocuments();
+            const rdve = await RendezVousEmploye.find({ 'service': idService }).sort({ 'date': 1 });
+            let date = null;
+
+            if (employes.length != 0) {
+                for (const employe of employes) {
+                    const free = await this.verificationFree(employe._id, dateTime);
+                    if (free) {
+                        resultat = employe;
+                        break; 
+                    }
+                }   
+            } else {
+                throw new Error("Sorry, no employees will be available at this service");
+            }
+            
+            if (resultat == null) {
+                throw new Error("Sorry, no employees will be available at this date and time");
+            }
+            
+            return resultat;
+
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async getFreeEmploye(idService, dateTime) {
         try {
             const employes = await Employe.find({ 'services': idService, 'isDeleted': 0, 'isManager': 0 });
