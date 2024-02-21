@@ -6,6 +6,7 @@ const rendezVousController = new RendezVousController();
 
 /* Prise RendezVous. */
 router.post('/client.rendezVous', rendezVousController.priseRendezVous);
+router.get('/indisponibilite', rendezVousController.indisponibilite);
 
 
 module.exports = router;
