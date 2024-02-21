@@ -16,7 +16,8 @@ class RendezVousService {
                 let debutIntersection = null;
                 let finIntersection = null;
                 let nbEmp = 0;
-
+                const existEmp = [];
+                console.log(rendezVousEmploye);
                 for (let i = 0; i < rendezVousEmploye.length; i++) {
 
                     const rdve = rendezVousEmploye[i];
@@ -32,34 +33,73 @@ class RendezVousService {
                                 debutIntersection = debut2;
                                 finIntersection = fin2;
 
+                                existEmp.push(employe._id);
                                 nbEmp++;
+
                             } else if (debutIntersection <= fin2 && finIntersection >= debut2) {
                                 debutIntersection = debutIntersection > debut2 ? debutIntersection : debut2;
                                 finIntersection = finIntersection < fin2 ? finIntersection : fin2;
+
+                                existEmp.push(employe._id);
                                 nbEmp++;
+
                             } else {
-                                if (nbEmp < employes.length) {
-                                    debutIntersection = debut2;
-                                    finIntersection = fin2;
-                                    nbEmp = 1;
-                                } else {
-                                    const resultat = {
-                                        "startTime": debutIntersection,
-                                        "endTime": finIntersection
+                                if ((debut2.getDate() == debutIntersection.getDate()) && (debut2.getMont()+1 == debutIntersection.getMont()+1) && (debut2.getFullYear() == debutIntersection.getFullYear())) {
+                                    if (employe._id in existEmp) {
+                                         if (nbEmp < employes.length) {
+                                            debutIntersection = debut2;
+                                            finIntersection = fin2;
+                                             
+                                            existEmp.splice(0, existEmp.length, employe._id);
+                                            nbEmp = 1;
+                                             
+                                        } else {
+                                            const resultat = {
+                                                "startTime": debutIntersection,
+                                                "endTime": finIntersection
+                                            }
+                                            resultats.push(resultat);
+                                            debutIntersection = debut2;
+                                            finIntersection = fin2;
+                                            existEmp.splice(0, existEmp.length, employe._id);
+                                            nbEmp = 1;
+                                        }
+                                    } else {
+                                        debutIntersection = debut2;
+                                        finIntersection = fin2;
+                                        existEmp.splice(0, existEmp.length, employe._id);
+                                        nbEmp = 1;
                                     }
-                                    resultats.push(resultat);
-                                    debutIntersection = debut2;
-                                    finIntersection = fin2;
-                                    nbEmp = 1;
+                                } else {
+                                    if (nbEmp < employes.length) {
+                                        debutIntersection = debut2;
+                                        finIntersection = fin2;
+                                        existEmp.splice(0, existEmp.length, employe._id);
+                                        nbEmp = 1;
+                                    } else {
+                                        const resultat = {
+                                            "startTime": debutIntersection,
+                                            "endTime": finIntersection
+                                        }
+                                        resultats.push(resultat);
+                                        debutIntersection = debut2;
+                                        finIntersection = fin2;
+                                        existEmp.splice(0, existEmp.length, employe._id);
+                                        nbEmp = 1;
+                                    }
                                 }
+                                
                             }
-                            console.log(employe.nom);
-                            console.log("debut:");
-                            console.log(debutIntersection);
-                            console.log("fin:");
-                            console.log(finIntersection);  
-                            console.log("nb:");
-                            console.log(nbEmp);
+                            // console.log(employe.nom);
+                            // console.log("debut:");
+                            // console.log(debutIntersection);
+                            // console.log("fin:");
+                            // console.log(finIntersection);  
+                            // console.log("nb:");
+                            // console.log(nbEmp);
+                            // console.log("tableau:");
+                            // console.log(existEmp);
+                            // console.log("-----------------------------------------");
                             break; 
                         }
                     }
@@ -81,6 +121,7 @@ class RendezVousService {
             return resultats;
 
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }
