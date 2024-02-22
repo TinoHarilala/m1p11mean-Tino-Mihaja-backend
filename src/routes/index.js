@@ -12,6 +12,7 @@ var preferenceRouter = require('../module/preference/preferenceRoutes');
 var rendezVousRouter = require('../module/rendez-vous/rendezVousRoutes');
 var offreSpesialRouter = require('../module/offre/offreSpecialRoutes');
 var depenseRouter = require('../module/depense/depenseRoutes');
+var paiementRouter = require('../module/paiement/paiementRoutes');
 
 var app = express();
 // const MongoClient = require('mongodb').MongoClient
@@ -40,6 +41,7 @@ app.use(preferenceRouter);
 app.use(rendezVousRouter);
 app.use(offreSpesialRouter);
 app.use(depenseRouter);
+app.use(paiementRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
