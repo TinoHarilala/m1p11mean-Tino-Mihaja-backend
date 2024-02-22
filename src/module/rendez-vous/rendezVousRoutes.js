@@ -7,10 +7,12 @@ const rendezVousController = new RendezVousController();
 /* CLIENT. */
 router.post('/client.rendezVous', rendezVousController.priseRendezVous);
 router.get('/indisponibilite', rendezVousController.indisponibilite);
-router.get('/historique/:id', rendezVousController.historique);
+router.get('/historique/:idClient', rendezVousController.historique);
 
 /* EMPLOYE. */
-router.get('/employe.rendezVous/:id', rendezVousController.rendezVousEmp);
+router.get('/employe.rendezVous/:idEmploye', rendezVousController.rendezVousEmp);
+router.get('/done/:id', rendezVousController.done);
+router.get('/suivi.task.done/:idEmploye', rendezVousController.suiviTacheEffectue);
 
 
 module.exports = router;

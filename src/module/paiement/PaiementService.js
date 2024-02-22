@@ -27,7 +27,7 @@ class PaiementService {
                 if (details[0].reste === 0) {
                     throw new Error("Le montant restant à payer est de 0");
                 }
-                
+
                 paiement.aPayer = details[0].reste;
             }
 
@@ -42,7 +42,7 @@ class PaiementService {
             const cs = {
                 "date": paiement.date,
                 "montant": paiement.montant
-            }
+            };
 
             const compteSociete = await CompteSociete.create(cs);
             client.solde = client.solde - paiement.montant;

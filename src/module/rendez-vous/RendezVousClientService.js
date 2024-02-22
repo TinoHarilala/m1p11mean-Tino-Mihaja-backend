@@ -53,7 +53,7 @@ class RendezVousClientService {
 
                             } else {
                                 if ((debut2.getDate() == debutIntersection.getDate()) && (debut2.getMonth()+1 == debutIntersection.getMonth()+1) && (debut2.getFullYear() == debutIntersection.getFullYear())) {
-                                    if (employe._id in existEmp) {
+                                    if (existEmp.includes(employe._id)) {
                                          if (nbEmp < employes.length) {
                                             debutIntersection = debut2;
                                             finIntersection = fin2;

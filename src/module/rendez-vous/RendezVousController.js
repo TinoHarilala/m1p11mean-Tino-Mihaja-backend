@@ -2,6 +2,7 @@ const OffreSpecial = require("../offre/OffreSpecialModel");
 const Service = require("../service/ServiceModel");
 const RendezVousClient = require("./RendezVousClient");
 const RendezVousClientService = require("./RendezVousClientService");
+const RendezVousEmploye = require("./RendezVousEmploye");
 const RendezVousEmployeService = require("./RendezVousEmployeService");
 
 const rendezVousClientService = new RendezVousClientService();
@@ -39,7 +40,7 @@ class RendezVousController {
 
     async historique(req, res) {
         try {
-            const resultats = await rendezVousClientService.historique(req.params.id);
+            const resultats = await rendezVousClientService.historique(req.params.idClient);
 
             res.status(200).json({ historique: resultats });
             
@@ -51,7 +52,31 @@ class RendezVousController {
 
     async rendezVousEmp(req, res) {
         try {
-            const resultats = await rendezVousEmployeService.rendezVousEmp(req.params.id);
+            const resultats = await rendezVousEmployeService.rendezVousEmp(req.params.idEmploye);
+
+            res.status(200).json({ rendezVous: resultats });
+            
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({ error: error.message });
+        }
+    }
+
+    async done(req, res) {
+        try {
+            const resultats = await rendezVousEmployeService.done(req.params.id);
+
+            res.status(200).json({ rendezVous: resultats });
+            
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({ error: error.message });
+        }
+    }
+
+    async suiviTacheEffectue(req, res) {
+        try {
+            const resultats = await RendezVousEmploye.find({'done': 1, 'idEmploye': req.params.idEmploye}).populate('service').populate('client');
 
             res.status(200).json({ rendezVous: resultats });
             
