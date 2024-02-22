@@ -7,7 +7,7 @@ class PreferenceController {
         try {
             const preference = new Preference({ ...req.body });
             const pref = await Preference.create(preference);
-            const preferences = await Preference.find({});
+            const preferences = await Preference.find({'isDeleted': 0});
 
             res.status(200).json({ Preference: preferences });
         } catch (error) {

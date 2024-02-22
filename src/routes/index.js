@@ -8,8 +8,10 @@ require('dotenv').config();
 var clientRouter = require('../module/client/clientRoutes');
 var employeRouter = require('../module/employe/employeRoutes');
 var serviceRouter = require('../module/service/serviceRoutes');
-var preferenceRouter = require('../module/preference/preferenceRoutes')
-var rendezVousRouter = require('../module/rendez-vous/rendezVousRoutes')
+var preferenceRouter = require('../module/preference/preferenceRoutes');
+var rendezVousRouter = require('../module/rendez-vous/rendezVousRoutes');
+var offreSpesialRouter = require('../module/offre/offreSpecialRoutes');
+var depenseRouter = require('../module/depense/depenseRoutes');
 
 var app = express();
 // const MongoClient = require('mongodb').MongoClient
@@ -36,6 +38,8 @@ app.use(employeRouter);
 app.use(serviceRouter);
 app.use(preferenceRouter);
 app.use(rendezVousRouter);
+app.use(offreSpesialRouter);
+app.use(depenseRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
