@@ -1,3 +1,4 @@
+const OffreSpecial = require("../offre/OffreSpecialModel");
 const Service = require("../service/ServiceModel");
 const RendezVousClient = require("./RendezVousClient");
 const RendezVousClientService = require("./RendezVousClientService");
@@ -9,8 +10,10 @@ class RendezVousController {
 
     async priseRendezVous(req, res) {
         try {
-            const rendezVousClient = new RendezVousClient({ ...req.body });
-            await rendezVousClientService.priseRendezVous(rendezVousClient);
+            const rendezVousClient = new RendezVousClient({ ...req.body.rendezVous });
+            const offre = await OffreSpecial.findById({ _id: req.body.offreSpecial }); 
+            
+            await rendezVousClientService.priseRendezVous(rendezVousClient, offre.remise);
 
             res.status(200).json({ message: "Successful appointments" });
             

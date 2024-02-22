@@ -199,8 +199,13 @@ class RendezVousService {
         }
     }
 
-    async assignation(idEmploye, rendezVousClient) {
+    async assignation(idEmploye, rendezVousClient, remise) {
         try {
+            const service = await Service.findById({ _id: rendezVousClient.service });
+
+            const prix = (service.prix * remise) / 100;
+            rendezVousClient.prix = prix;
+
             const rdvc = await (await RendezVousClient.create(rendezVousClient)).populate('service');
 
             const duree = rdvc.service.duree;
@@ -213,7 +218,7 @@ class RendezVousService {
                 endTime.setHours(endTime.getHours() + duree);
             }
 
-            const commission = (rdvc.service.prix * rdvc.service.commission) / 100;
+            const commission = (prix * rdvc.service.commission) / 100;
 
             const rendezVousEmploye = {
                 'idRendezVousClient': rdvc._id,
@@ -269,7 +274,7 @@ class RendezVousService {
         }
     }
 
-    async priseRendezVous(rendezVousClient) {
+    async priseRendezVous(rendezVousClient, remise) {
         try {
             const idService = rendezVousClient.service;
             const dateTime = rendezVousClient.dateTime;
@@ -290,7 +295,7 @@ class RendezVousService {
                     }
                 } else {
                     const freeEmp = await this.getFreeEmploye(idService, dateTime);
-                    this.assignation(freeEmp, rendezVousClient);
+                    this.assignation(freeEmp, rendezVousClient, remise);
                 }
             }
 
