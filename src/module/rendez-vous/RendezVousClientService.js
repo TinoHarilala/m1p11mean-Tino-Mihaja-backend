@@ -17,7 +17,7 @@ class RendezVousService {
                 let finIntersection = null;
                 let nbEmp = 0;
                 const existEmp = [];
-                console.log(rendezVousEmploye);
+
                 for (let i = 0; i < rendezVousEmploye.length; i++) {
 
                     const rdve = rendezVousEmploye[i];
@@ -43,8 +43,16 @@ class RendezVousService {
                                 existEmp.push(employe._id);
                                 nbEmp++;
 
+                            } else if (debutIntersection <= fin2 && rendezVousEmploye[i - 1] >= debut2) {
+                                finIntersection = rendezVousEmploye[i - 1];
+                                debutIntersection = debutIntersection > debut2 ? debutIntersection : debut2;
+                                finIntersection = finIntersection < fin2 ? finIntersection : fin2;
+
+                                existEmp.push(employe._id);
+                                nbEmp++;
+
                             } else {
-                                if ((debut2.getDate() == debutIntersection.getDate()) && (debut2.getMont()+1 == debutIntersection.getMont()+1) && (debut2.getFullYear() == debutIntersection.getFullYear())) {
+                                if ((debut2.getDate() == debutIntersection.getDate()) && (debut2.getMonth()+1 == debutIntersection.getMonth()+1) && (debut2.getFullYear() == debutIntersection.getFullYear())) {
                                     if (employe._id in existEmp) {
                                          if (nbEmp < employes.length) {
                                             debutIntersection = debut2;
@@ -166,19 +174,19 @@ class RendezVousService {
                 finService.setHours(finService.getHours() + service.duree);
             }
 
-           const resultat = await RendezVousEmploye.find({
-            $or: [
-                {
-                    startTime: { $lte: dateTime },
-                    endTime: { $gte: dateTime }
-                },
-                {
-                    startTime: { $lte: finService },
-                    endTime: { $gte: finService }
-                }
-            ],
-            idEmploye: idEmploye
-        });
+            const resultat = await RendezVousEmploye.find({
+                $or: [
+                    {
+                        startTime: { $lte: dateTime },
+                        endTime: { $gte: dateTime }
+                    },
+                    {
+                        startTime: { $lte: finService },
+                        endTime: { $gte: finService }
+                    }
+                ],
+                idEmploye: idEmploye
+            });
 
             if (resultat.length == 0) {
                 return true;
