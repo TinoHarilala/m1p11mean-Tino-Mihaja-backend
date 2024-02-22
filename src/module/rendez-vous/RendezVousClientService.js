@@ -4,7 +4,7 @@ const Service = require('../service/ServiceModel');
 const RendezVousClient = require('./RendezVousClient');
 const RendezVousEmploye = require('./RendezVousEmploye');
 
-class RendezVousService {
+class RendezVousClientService {
    
     async indisponibilite(idService) {
         try {
@@ -205,6 +205,7 @@ class RendezVousService {
 
             const prix = (service.prix * remise) / 100;
             rendezVousClient.prix = prix;
+            rendezVousClient.employe = idEmploye;
 
             const rdvc = await (await RendezVousClient.create(rendezVousClient)).populate('service');
 
@@ -303,6 +304,17 @@ class RendezVousService {
             throw error;
         }
     }
+
+    async historique(idClient) {
+        try {
+            const rendezVous = await RendezVousClient.find({ 'idClient': idClient }).populate('employe').populate('service').sort({ 'dateTime': -1 });
+            
+            return rendezVous;
+
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
-module.exports = RendezVousService;
+module.exports = RendezVousClientService;
