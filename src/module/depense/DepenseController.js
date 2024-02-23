@@ -7,7 +7,24 @@ class DepenseController {
             const depense = new Depense({ ...req.body });
 
             const d = await Depense.create(depense);
-            const depenses = await Depense.find({'isDeleted': 0});
+            const depenses = await Depense.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            date: { $dateToString: { format: "%Y-%m", date: "$date" } }
+                        },
+                        total: { $sum: "$montant" }
+                    }
+                },
+                {
+                    $project: {
+                        date: "$_id.date",
+                        total: 1,
+                        _id: 0 
+                    }
+                },
+                { $sort: { '_id.date': -1 } }
+            ]);
 
             res.status(200).json({ Depense: depenses });
         } catch (error) {
@@ -18,9 +35,27 @@ class DepenseController {
 
     async get(req, res) {
         try {
-            const depenses = await Depense.find({'isDeleted': 0});
+            
+            const resultats = await Depense.aggregate([
+                {
+                    $group: {
+                        _id: {
+                            date: { $dateToString: { format: "%Y-%m", date: "$date" } }
+                        },
+                        total: { $sum: "$montant" }
+                    }
+                },
+                {
+                    $project: {
+                        date: "$_id.date",
+                        total: 1,
+                        _id: 0 
+                    }
+                },
+                { $sort: { '_id.date': -1 } }
+            ]);
 
-            res.status(200).json({ Depense: depenses });
+            res.status(200).json({ Depense: resultats });
         } catch (error) {
             console.log(error);
             res.status(401).json({ error: error.message });

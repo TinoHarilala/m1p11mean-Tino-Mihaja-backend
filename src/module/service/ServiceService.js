@@ -20,6 +20,24 @@ class ServiceService {
             throw error;
         }
     }
+
+     async findById(idService) {
+        try {
+            const services = await Service.find({ 'isDeleted': 0, '_id': idService });
+            
+            const resultatsPromises = services.map(async (service) => {
+                const employe = await Employe.find({ 'services': service._id , 'isDeleted': 0, 'isManager': 0});
+                return { ...service.toObject(), employe };
+            });
+
+            const resultats = await Promise.all(resultatsPromises);
+
+            return resultats;
+
+        } catch (error) {
+            throw error;
+        }
+    }
   
     async create(service, employes) {
         try {

@@ -29,7 +29,7 @@ class ServiceController {
 
     async findById(req, res) {
         try {
-            const service = await Service.findById({_id: req.params.id});
+            const service = await serviceService.findById(req.params.id);
 
             res.status(200).json({ service: service });
         } catch (error) {
