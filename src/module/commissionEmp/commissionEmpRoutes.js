@@ -5,6 +5,6 @@ var router = express.Router();
 const commissionEmpController = new CommissionEmpController();
 
 /* Détails du commissionEmp. */
-router.get('/suivi.commission/:employe', commissionEmpController.get);
+router.get('/suivi.commission/:employe/', commissionEmpController.get);
 
 module.exports = router;

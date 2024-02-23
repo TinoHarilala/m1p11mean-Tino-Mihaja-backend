@@ -18,7 +18,7 @@ class RendezVousService {
     async done(id) {
         try {
             const rendezVous = await RendezVousEmploye.findById({ _id: id });
-            // const today = new Date();
+            
             const today = DateTime.now().setZone('Europe/Moscow');
             const t = new Date(today.toString());
 

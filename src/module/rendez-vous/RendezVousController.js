@@ -4,6 +4,7 @@ const RendezVousClient = require("./RendezVousClient");
 const RendezVousClientService = require("./RendezVousClientService");
 const RendezVousEmploye = require("./RendezVousEmploye");
 const RendezVousEmployeService = require("./RendezVousEmployeService");
+const SendMail = require('../mail/SendEmail');
 
 const rendezVousClientService = new RendezVousClientService();
 const rendezVousEmployeService = new RendezVousEmployeService();
@@ -41,6 +42,8 @@ class RendezVousController {
     async historique(req, res) {
         try {
             const resultats = await rendezVousClientService.historique(req.params.idClient);
+            const mail = new SendMail();
+            await mail.sendEmailRappel("ramanamihandr@gmail.com");
 
             res.status(200).json({ historique: resultats });
             
@@ -53,6 +56,7 @@ class RendezVousController {
     async rendezVousEmp(req, res) {
         try {
             const resultats = await rendezVousEmployeService.rendezVousEmp(req.params.idEmploye);
+            
 
             res.status(200).json({ rendezVous: resultats });
             

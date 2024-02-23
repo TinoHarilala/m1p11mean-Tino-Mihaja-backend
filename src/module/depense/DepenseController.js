@@ -7,11 +7,17 @@ class DepenseController {
             const depense = new Depense({ ...req.body });
 
             const d = await Depense.create(depense);
-            const depenses = await Depense.aggregate([
+
+            const int = parseInt(0);
+
+            const pipeline = [
+                {
+                    $match: { "isDeleted": int }
+                },
                 {
                     $group: {
                         _id: {
-                            date: { $dateToString: { format: "%Y-%m", date: "$date" } }
+                            date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }
                         },
                         total: { $sum: "$montant" }
                     }
@@ -23,8 +29,31 @@ class DepenseController {
                         _id: 0 
                     }
                 },
-                { $sort: { '_id.date': -1 } }
-            ]);
+                {
+                    $addFields: {
+                        year: { $year: { $toDate: "$date" } }, // Ajouter l'année de la date
+                        month: { $month: { $toDate: "$date" } } // Ajouter le mois de la date
+                    }
+                },
+            ];
+
+            // Construire le filtre pour les mois et/ou années définis
+            const filter = {};
+            if (req.query.mois !== undefined) {
+                filter.month = parseInt(req.query.mois);
+            }
+            if (req.query.annee !== undefined) {
+                filter.year = parseInt(req.query.annee);
+            }
+
+            // Ajouter le filtre au pipeline s'il y a des filtres définis
+            if (Object.keys(filter).length > 0) {
+                pipeline.push({ $match: filter });
+            }
+
+            pipeline.push({ $sort: { 'date': -1 } });
+
+            const depenses = await Depense.aggregate(pipeline);
 
             res.status(200).json({ Depense: depenses });
         } catch (error) {
@@ -35,12 +64,16 @@ class DepenseController {
 
     async get(req, res) {
         try {
+            const int = parseInt(0);
             
-            const resultats = await Depense.aggregate([
+            const pipeline = [
+                {
+                    $match: { "isDeleted": int }
+                },
                 {
                     $group: {
                         _id: {
-                            date: { $dateToString: { format: "%Y-%m", date: "$date" } }
+                            date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }
                         },
                         total: { $sum: "$montant" }
                     }
@@ -52,8 +85,31 @@ class DepenseController {
                         _id: 0 
                     }
                 },
-                { $sort: { '_id.date': -1 } }
-            ]);
+                {
+                    $addFields: {
+                        year: { $year: { $toDate: "$date" } }, // Ajouter l'année de la date
+                        month: { $month: { $toDate: "$date" } } // Ajouter le mois de la date
+                    }
+                },
+            ];
+
+            // Construire le filtre pour les mois et/ou années définis
+            const filter = {};
+            if (req.query.mois !== undefined) {
+                filter.month = parseInt(req.query.mois);
+            }
+            if (req.query.annee !== undefined) {
+                filter.year = parseInt(req.query.annee);
+            }
+
+            // Ajouter le filtre au pipeline s'il y a des filtres définis
+            if (Object.keys(filter).length > 0) {
+                pipeline.push({ $match: filter });
+            }
+
+            pipeline.push({ $sort: { 'date': -1 } });
+
+            const resultats = await Depense.aggregate(pipeline);
 
             res.status(200).json({ Depense: resultats });
         } catch (error) {
