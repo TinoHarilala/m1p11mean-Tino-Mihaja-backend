@@ -14,9 +14,9 @@ class RendezVousController {
     async priseRendezVous(req, res) {
         try {
             const rendezVousClient = new RendezVousClient({ ...req.body.rendezVous });
-            const offre = await OffreSpecial.findById({ _id: req.body.offreSpecial }); 
 
-            await rendezVousClientService.priseRendezVous(rendezVousClient, offre.remise);
+            const offre = (req.body.offreSpecial) ? await OffreSpecial.findById({ _id: req.body.offreSpecial }) : null;
+            await rendezVousClientService.priseRendezVous(rendezVousClient, (offre && offre.remise) ? offre.remise : null);
 
             res.status(200).json({ message: "Successful appointments" });
             

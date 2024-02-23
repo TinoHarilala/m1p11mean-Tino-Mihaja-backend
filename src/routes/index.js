@@ -16,19 +16,10 @@ var paiementRouter = require('../module/paiement/paiementRoutes');
 var commissionEmpRouter = require('../module/commissionEmp/commissionEmpRoutes');
 
 var app = express();
-// const MongoClient = require('mongodb').MongoClient
+
 const mongoose = require('mongoose');
 
 const connectionString = process.env.DB_URL;
-
-// MongoClient.connect(connectionString)
-//   .then(client => {
-//     console.log('Connected to Database')
-
-//   })
-//   .catch(console.error)
-
-// Mongo DB conncetion
 
 mongoose.connect(connectionString, {dbName: 'salondebeaute'})
   .then(() => console.log('Connected to Database'))

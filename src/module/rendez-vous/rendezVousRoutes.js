@@ -6,7 +6,7 @@ const rendezVousController = new RendezVousController();
 
 /* CLIENT. */
 router.post('/client.rendezVous', rendezVousController.priseRendezVous);
-router.get('/indisponibilite', rendezVousController.indisponibilite);
+router.post('/indisponibilite', rendezVousController.indisponibilite);
 router.get('/historique/:idClient', rendezVousController.historique);
 
 /* EMPLOYE. */

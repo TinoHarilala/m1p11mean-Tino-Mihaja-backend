@@ -4,6 +4,8 @@ const { secret_code, Middleware } = require('../../middleware/index');
 const HoraireTravail = require('../horaireTravail/HoraireTravailModel');
 const HoraireTravailService = require('../horaireTravail/HoraireTravailService');
 
+const bcrypt = require('bcrypt');
+
 const employeService = new EmployeService();
 const horaireTravailService = new HoraireTravailService();
 const middleware = new Middleware();
@@ -27,6 +29,9 @@ class EmployeController {
             const reqBodyEmp = new Employe({ ...req.body.employe });
             const employe = await employeService.registration(reqBodyEmp);
 
+            if (!req.body.workingHours) {
+                res.status(401).json({ error: "L'horaire de travail est absent" });
+            }
             const reqBodyWorking = new HoraireTravail({ ...req.body.workingHours });
             reqBodyWorking.employe = employe._id;
             const wh = await horaireTravailService.create(reqBodyWorking);
@@ -63,6 +68,9 @@ class EmployeController {
         try {
             const reqBodyWorking = new HoraireTravail({ ...req.body.workingHours });
             const reqBodyEmp = new Employe({ ...req.body.employe });
+            if (reqBodyEmp.password) {
+                reqBodyEmp.password = await bcrypt.hash(reqBodyEmp.password, 10);
+            }
             const employe = await Employe.findByIdAndUpdate(reqBodyEmp._id, reqBodyEmp, { new: true });
             reqBodyWorking.employe = employe._id;
 

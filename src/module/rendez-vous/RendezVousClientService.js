@@ -202,8 +202,8 @@ class RendezVousClientService {
     async assignation(idEmploye, rendezVousClient, remise) {
         try {
             const service = await Service.findById({ _id: rendezVousClient.service });
-
-            const prix = (service.prix * remise) / 100;
+            const prix = (remise) ? (service.prix * remise) / 100 : service.prix;
+            
             rendezVousClient.prix = prix;
             rendezVousClient.employe = idEmploye;
 
