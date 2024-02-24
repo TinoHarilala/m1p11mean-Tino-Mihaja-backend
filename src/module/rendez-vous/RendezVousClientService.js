@@ -287,11 +287,11 @@ class RendezVousClientService {
                 if (preference.length != 0) {
                     const free = await this.verificationFree(preference[0].employe, dateTime, idService);
                     if (free) {
-                        this.assignation(preference[0].employe, rendezVousClient);
+                        this.assignation(preference[0].employe, rendezVousClient, remise);
 
                     } else {
                         const freeEmp = await this.getFreeEmploye(idService, dateTime);
-                        this.assignation(freeEmp, rendezVousClient);
+                        this.assignation(freeEmp, rendezVousClient, remise);
 
                     }
                 } else {
