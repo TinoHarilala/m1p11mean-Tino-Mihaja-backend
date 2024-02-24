@@ -52,15 +52,19 @@ class EmployeController {
             };
 
             if (req.query.service !== undefined) {
-                filters.services = new mongoose.Types.ObjectId(req.query.service);
+                if (req.query.service.toString() != "") {
+                    filters.services = new mongoose.Types.ObjectId(req.query.service);
+                }
             }
 
             if (req.query.nom !== undefined) {
-                filters.nom = { $regex: req.query.nom, $options: 'i' };
+                if (req.query.nom.toString() != "") {
+                    filters.nom = { $regex: req.query.nom, $options: 'i' };
+                }
             }
 
             const employe = await Employe.find(filters).populate('services');
-            
+
             res.status(200).json({ employe: employe });
         } catch (error) {
             res.status(401).json({error: error.message});

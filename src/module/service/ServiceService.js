@@ -8,7 +8,9 @@ class ServiceService {
              const filters = {'isDeleted': 0 };
 
             if (nom !== undefined) {
-                filters.nom = { $regex: nom, $options: 'i' };
+                if (nom.toString() != "") {
+                    filters.nom = { $regex: nom, $options: 'i' };
+                }
             }
 
             const services = await Service.find(filters);

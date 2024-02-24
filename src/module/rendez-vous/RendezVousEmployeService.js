@@ -12,16 +12,20 @@ class RendezVousService {
             const filters = { 'idEmploye': idEmploye };
 
             if (service !== undefined) {
-                filters.service = new mongoose.Types.ObjectId(service);
+                if (service.toString() != "") {
+                    filters.service = new mongoose.Types.ObjectId(service);
+                }
             }
 
             if (date !== undefined) {
-                const startOfDay = new Date(date);
-                startOfDay.setHours(0, 0, 0, 0); // Début de la journée
-                const endOfDay = new Date(date);
-                endOfDay.setHours(23, 59, 59, 999); // Fin de la journée
+                if (date.toString() != "") {
+                    const startOfDay = new Date(date);
+                    startOfDay.setHours(0, 0, 0, 0); // Début de la journée
+                    const endOfDay = new Date(date);
+                    endOfDay.setHours(23, 59, 59, 999); // Fin de la journée
 
-                filters.date = { $gte: startOfDay, $lte: endOfDay };
+                    filters.date = { $gte: startOfDay, $lte: endOfDay };
+                }
             }
 
             const rendezVous = await RendezVousEmploye.find(filters).populate('client').populate('service').sort({ 'date': -1 });

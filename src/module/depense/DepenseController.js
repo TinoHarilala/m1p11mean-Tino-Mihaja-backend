@@ -40,10 +40,14 @@ class DepenseController {
             // Construire le filtre pour les mois et/ou années définis
             const filter = {};
             if (req.query.mois !== undefined) {
-                filter.month = parseInt(req.query.mois);
+                if (req.query.mois.toString() != "") {
+                    filter.month = parseInt(req.query.mois);
+                }
             }
             if (req.query.annee !== undefined) {
-                filter.year = parseInt(req.query.annee);
+                if (req.query.annee.toString() != "") {
+                    filter.year = parseInt(req.query.annee);
+                }
             }
 
             // Ajouter le filtre au pipeline s'il y a des filtres définis
@@ -96,10 +100,14 @@ class DepenseController {
             // Construire le filtre pour les mois et/ou années définis
             const filter = {};
             if (req.query.mois !== undefined) {
-                filter.month = parseInt(req.query.mois);
+                if (req.query.mois.toString() != "") {
+                    filter.month = parseInt(req.query.mois);
+                }
             }
             if (req.query.annee !== undefined) {
-                filter.year = parseInt(req.query.annee);
+                if (req.query.annee.toString() != "") {
+                    filter.year = parseInt(req.query.annee);
+                }
             }
 
             // Ajouter le filtre au pipeline s'il y a des filtres définis
