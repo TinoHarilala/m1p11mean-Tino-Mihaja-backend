@@ -15,7 +15,7 @@ class RendezVousController {
     async priseRendezVous(req, res) {
         try {
             const rendezVousClient = new RendezVousClient({ ...req.body.rendezVous });
-
+            
             const offre = (req.body.offreSpecial) ? await OffreSpecial.findById({ _id: req.body.offreSpecial }) : null;
             await rendezVousClientService.priseRendezVous(rendezVousClient, (offre && offre.remise) ? offre.remise : null);
 
@@ -41,9 +41,9 @@ class RendezVousController {
 
     async historique(req, res) {
         try {
-            const resultats = await rendezVousClientService.historique(req.params.idClient);
-            const mail = new SendMail();
-            await mail.sendEmailRappel("ramanamihandr@gmail.com");
+            const resultats = await rendezVousClientService.historique(req.params.idClient, req.query.date, req.query.service);
+            // const mail = new SendMail();
+            // await mail.sendEmailRappel("ramanamihandr@gmail.com");
 
             res.status(200).json({ historique: resultats });
             
@@ -55,7 +55,7 @@ class RendezVousController {
 
     async rendezVousEmp(req, res) {
         try {
-            const resultats = await rendezVousEmployeService.rendezVousEmp(req.params.idEmploye);
+            const resultats = await rendezVousEmployeService.rendezVousEmp(req.params.idEmploye, req.query.date, req.query.service);
             
 
             res.status(200).json({ rendezVous: resultats });

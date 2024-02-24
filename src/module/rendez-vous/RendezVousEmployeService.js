@@ -1,12 +1,30 @@
 const CommissionEmp = require('../commissionEmp/CommissionEmpModel');
 const RendezVousEmploye = require('./RendezVousEmploye');
 const { DateTime } = require('luxon');
+const mongoose = require('mongoose');
+
 
 class RendezVousService {
    
-    async rendezVousEmp(idEmploye) {
+    async rendezVousEmp(idEmploye, date, service) {
         try {
-            const rendezVous = await RendezVousEmploye.find({ 'idEmploye': idEmploye }).populate('client').populate('service').sort({ 'date': -1 });
+
+            const filters = { 'idEmploye': idEmploye };
+
+            if (service !== undefined) {
+                filters.service = new mongoose.Types.ObjectId(service);
+            }
+
+            if (date !== undefined) {
+                const startOfDay = new Date(date);
+                startOfDay.setHours(0, 0, 0, 0); // Début de la journée
+                const endOfDay = new Date(date);
+                endOfDay.setHours(23, 59, 59, 999); // Fin de la journée
+
+                filters.date = { $gte: startOfDay, $lte: endOfDay };
+            }
+
+            const rendezVous = await RendezVousEmploye.find(filters).populate('client').populate('service').sort({ 'date': -1 });
             
             return rendezVous;
 

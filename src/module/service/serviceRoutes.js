@@ -12,6 +12,8 @@ router.get('/get.service', serviceController.get);
 
 router.get('/service/:id', serviceController.findById);
 
+router.get('/service.employe/:idEmploye', serviceController.findByEmploye);
+
 router.post('/update.service', serviceController.update);
 
 router.get('/delete.service/:id', serviceController.delete);

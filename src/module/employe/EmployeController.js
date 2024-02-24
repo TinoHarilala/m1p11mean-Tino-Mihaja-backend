@@ -4,6 +4,8 @@ const { secret_code, Middleware } = require('../../middleware/index');
 const HoraireTravail = require('../horaireTravail/HoraireTravailModel');
 const HoraireTravailService = require('../horaireTravail/HoraireTravailService');
 
+const mongoose = require('mongoose');
+
 const bcrypt = require('bcrypt');
 
 const employeService = new EmployeService();
@@ -44,7 +46,20 @@ class EmployeController {
 
     async getEmployes(req, res) {
         try {
-            const employe = await Employe.find({'isDeleted': 0, 'isManager': 0}).populate('services');
+            const filters = {
+                'isDeleted': 0,
+                'isManager': 0
+            };
+
+            if (req.query.service !== undefined) {
+                filters.services = new mongoose.Types.ObjectId(req.query.service);
+            }
+
+            if (req.query.nom !== undefined) {
+                filters.nom = { $regex: req.query.nom, $options: 'i' };
+            }
+
+            const employe = await Employe.find(filters).populate('services');
             
             res.status(200).json({ employe: employe });
         } catch (error) {

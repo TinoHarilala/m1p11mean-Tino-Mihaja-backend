@@ -3,9 +3,15 @@ const Service = require('./ServiceModel');
 
 class ServiceService {
 
-    async get() {
+    async get(nom) {
         try {
-            const services = await Service.find({ 'isDeleted': 0 });
+             const filters = {'isDeleted': 0 };
+
+            if (nom !== undefined) {
+                filters.nom = { $regex: nom, $options: 'i' };
+            }
+
+            const services = await Service.find(filters);
             
             const resultatsPromises = services.map(async (service) => {
                 const employe = await Employe.find({ 'services': service._id , 'isDeleted': 0, 'isManager': 0});

@@ -4,6 +4,8 @@ const Service = require('../service/ServiceModel');
 const RendezVousClient = require('./RendezVousClient');
 const RendezVousEmploye = require('./RendezVousEmploye');
 
+const mongoose = require('mongoose');
+
 class RendezVousClientService {
    
     async indisponibilite(idService) {
@@ -305,9 +307,25 @@ class RendezVousClientService {
         }
     }
 
-    async historique(idClient) {
+    async historique(idClient, date, service) {
         try {
-            const rendezVous = await RendezVousClient.find({ 'idClient': idClient }).populate('employe').populate('service').sort({ 'dateTime': -1 });
+
+            const filters = { 'idClient': idClient };
+
+            if (service !== undefined) {
+                filters.service = new mongoose.Types.ObjectId(service);
+            }
+
+            if (date !== undefined) {
+                const startOfDay = new Date(date);
+                startOfDay.setHours(0, 0, 0, 0); // Début de la journée
+                const endOfDay = new Date(date);
+                endOfDay.setHours(23, 59, 59, 999); // Fin de la journée
+
+                filters.dateTime = { $gte: startOfDay, $lte: endOfDay };
+            }
+
+            const rendezVous = await RendezVousClient.find(filters).populate('employe').populate('service').sort({ 'dateTime': -1 });
             
             return rendezVous;
 
