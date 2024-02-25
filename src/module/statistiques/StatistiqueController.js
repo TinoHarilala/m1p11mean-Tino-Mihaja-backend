@@ -16,6 +16,40 @@ class StatistiqueController {
         }
     }
 
+    
+    async reservationParJourMois(req, res) {
+        try {
+            const reservationParJourMois = await statistiqueService.reservationParJourMois(req.query.mois, req.query.annee);
+
+            res.status(200).json({ reservationParJourMois: reservationParJourMois });
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({error: error.message});
+        }
+    }
+
+    async chiffreAffaire(req, res) {
+        try {
+            const chiffreAffaire = await statistiqueService.chiffreAffaire(req.query.mois, req.query.annee);
+
+            res.status(200).json({ chiffreAffaire: chiffreAffaire });
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({error: error.message});
+        }
+    }
+
+    async benefice(req, res) {
+        try {
+            const benefice = await statistiqueService.benefice(req.query.mois, req.query.annee);
+
+            res.status(200).json({ benefice: benefice });
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({error: error.message});
+        }
+    }
+
 }
 
 module.exports = StatistiqueController;

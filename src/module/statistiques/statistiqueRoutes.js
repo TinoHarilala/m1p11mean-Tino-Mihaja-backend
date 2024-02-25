@@ -4,8 +4,10 @@ var router = express.Router();
 
 const statistiqueController = new StatistiqueController();
 
-/* Create statistique. */
 router.get('/statistique.temps', statistiqueController.tempsMoyenTravail);
+router.get('/statistique.reservation', statistiqueController.reservationParJourMois);
+router.get('/statistique.chiffreAffaire', statistiqueController.chiffreAffaire);
+router.get('/statistique.benefice', statistiqueController.benefice);
 
 
 module.exports = router;
