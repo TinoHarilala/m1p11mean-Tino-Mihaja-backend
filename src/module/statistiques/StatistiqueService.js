@@ -93,43 +93,23 @@ class StatistiqueService {
         //         }
         //     }
         // ]);
-    const resultats = await RendezVousEmploye.aggregate([
-        {
-            $group: {
-                _id: {
-                    date: { $dateToString: { format: "%Y-%m", date: "$date" } },
-                    employe: "$idEmploye"
-                },
-                totalMilliseconds: {
-                    $sum: { $subtract: ["$endTime", "$startTime"] }
-                }
-            }
-        },
-        {
-            $project: {
-                date: "$_id.date",
-                employe: "$_id.employe",
-                totalHours: { $divide: ["$totalMilliseconds", 3600000] }, // Convertir les millisecondes en heures
-                _id: 0
-            }
-        },
-        {
-            $group: {
-                _id: "$employe",
-                totalHours: { $sum: "$totalHours" }, // Somme des heures de travail pour chaque employé
-                count: { $sum: 1 } // Compter le nombre d'enregistrements pour chaque employé (pour obtenir le nombre de mois)
-            }
-        },
-        {
-            $project: {
-                employe: "$_id",
-                totalHours: 1,
-                averageHours: { $divide: ["$totalHours", { $multiply: ["$count", 176] }] }, // Division par le nombre total d'heures dans tous les mois
-                _id: 0
-            }
+    const resultatsBruts = await RendezVousEmploye.aggregate([
+    {
+        $project: {
+            date: 1,
+            idEmploye: 1,
+            heureTravail: {
+                    $divide: [{ $subtract: ["$endTime", "$startTime"] }, 3600000]
+            },
+            _id: 0
         }
-    ]);
+    }
+]);
 
+// Maintenant, vous pouvez peupler les références
+const resultats = await RendezVousEmploye.populate(resultatsBruts, { path: "idEmploye" });
+
+// resultatsPeuples contiendra les résultats peuplés
 
 
         return resultats;
@@ -302,11 +282,43 @@ class StatistiqueService {
                 beneficeParMois[key].depenses += dep.total;
         });
 
+        const resultats = [];
+
         Object.keys(beneficeParMois).forEach(key => {
             beneficeParMois[key].benefice = beneficeParMois[key].revenu - beneficeParMois[key].depenses;
+
+            const s = key.split("-");
+            const a = s[0];
+            const m = s[1];
+
+            beneficeParMois[key].date = key;
+
+            if (mois !== undefined && annee !== undefined) {
+                if (mois.toString() != "" && annee.toString() != "") {
+                    if (annee + '-' + mois == key) {
+                        resultats.push(beneficeParMois[key]); 
+                    }
+                }
+            }
+
+            if (mois === undefined) {
+                if (annee == a) {
+                    resultats.push(beneficeParMois[key]); 
+                }
+            }
+
+            if (annee === undefined) {
+                if (mois == m) {
+                    resultats.push(beneficeParMois[key]); 
+                }
+            }
+            
+            if (mois == undefined && annee == undefined){
+                resultats.push(beneficeParMois[key]); 
+            }
         });
 
-        return beneficeParMois;
+        return resultats;
     }
 }
 
