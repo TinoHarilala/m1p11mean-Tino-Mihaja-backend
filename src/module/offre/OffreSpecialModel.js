@@ -7,8 +7,7 @@ const OffreSpecialSchema = new Schema({
     remise: { type: Number, required: true },
     start: { type: Date, required: true },
     end: { type: Date, required: true },
-    isDeleted: { type: Number, required: true, default: 0 },
-    status: {type: Number, required: true, default: 0}
+    isDeleted: { type: Number, required: true, default: 0 }
 });
 
 const OffreSpecial = model("OffreSpecial", OffreSpecialSchema);

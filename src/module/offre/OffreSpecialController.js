@@ -1,3 +1,5 @@
+const Client = require("../client/ClientModel");
+const Notification = require("../notification/NotificationModel");
 const Service = require("../service/ServiceModel");
 const OffreSpecial = require("./OffreSpecialModel");
 const OffreSpecialService = require("./OffreSpecialService");
@@ -17,6 +19,10 @@ class OffreSpecialController {
             }
             
             const o = await OffreSpecial.create(offreSpecial);
+            const clients = await Client.find();
+            for (const client of clients) {
+                const notif = await Notification.create({ "client": client, "offre": o });
+            }
             const offreSpecials = await OffreSpecial.find({'isDeleted': 0}).populate('services');
 
             res.status(200).json({ OffreSpecial: offreSpecials });

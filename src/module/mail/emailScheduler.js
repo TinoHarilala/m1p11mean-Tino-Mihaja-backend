@@ -89,8 +89,6 @@ async function planiferRappels() {
       const dayOfWeek = dateRappel.getDay();
 
       const cronPattern = `00 10 ${dayOfMonth} ${month} ${dayOfWeek}`;
-      console.log(cronPattern);
-      console.log(rd);
 
       cron.schedule(cronPattern, () => {
           console.log('Planification de l\'envoi du rappel pour :', rd.idClient.nom);

@@ -16,6 +16,7 @@ var depenseRouter = require('../module/depense/depenseRoutes');
 var paiementRouter = require('../module/paiement/paiementRoutes');
 var commissionEmpRouter = require('../module/commissionEmp/commissionEmpRoutes');
 var statistiqueEmpRouter = require('../module/statistiques/statistiqueRoutes');
+var notificationRouter = require('../module/notification/notificationRoutes');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use(depenseRouter);
 app.use(paiementRouter);
 app.use(commissionEmpRouter);
 app.use(statistiqueEmpRouter);
+app.use(notificationRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
