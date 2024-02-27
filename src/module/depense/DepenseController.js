@@ -46,7 +46,7 @@ class DepenseController {
                     $project: {
                         date: "$_id.date",
                         total: 1,
-                        _id: 0 
+                        _id: 1 
                     }
                 },
                 {
@@ -98,7 +98,7 @@ class DepenseController {
                         description: 1,
                         date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } }, // Utilisez $dateToString pour formater la date
                         montant: 1,
-                        _id: 0
+                        _id: 1
                     }
                 },
                 {

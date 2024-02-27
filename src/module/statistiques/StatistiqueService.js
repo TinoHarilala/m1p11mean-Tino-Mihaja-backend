@@ -13,38 +13,64 @@ class StatistiqueService {
         
         const pipeline = [
             {
-                $group: {
-                    _id: {
-                        date: { $dateToString: { format: "%Y-%m", date: "$date" } },
-                        employe: "$employe"
-                    },
-                    totalHours: {
-                        $sum: {
-                            $subtract: ["$endTime", "$startTime"]
-                        }
-                    }
-                }
+                $match: { 'done': 1 }
             },
             {
-                $match: { "_id.employe": emp }
+                $group: {
+                    _id: {
+                        date: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+                        employe: "$idEmploye"
+                    },
+                    totalMilliseconds: {
+                        $sum: { $subtract: ["$endTime", "$startTime"] }
+                    }
+                }
             },
             {
                 $project: {
                     date: "$_id.date",
                     employe: "$_id.employe",
-                    totalHours: 1,
+                    totalHours: { $divide: ["$totalMilliseconds", 3600000] },
                     _id: 0
                 }
             },
             {
+                $group: {
+                    _id: {
+                        employe: "$employe",
+                        year_month: { $substr: ["$date", 0, 7] } // Extraire l'année et le mois de la date
+                    },
+                    totalHours: { $sum: "$totalHours" },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    employe: "$_id.employe",
+                    year_month: "$_id.year_month",
+                    month: { $toInt: { $substr: ["$_id.year_month", 5, 2] } }, 
+                    year: { $toInt: { $substr: ["$_id.year_month", 0, 4] } },
+                    totalHours: 1,
+                    count: 1,
+                    averageHours: { $divide: ["$totalHours", 22] },
+                    _id: 0
+                }
+            },
+            {
+                $lookup: {
+                    from: "employes",
+                    localField: "employe",
+                    foreignField: "_id",
+                    as: "employee"
+                }
+            },
+            {
                 $addFields: {
-                    year: { $year: { $toDate: "$date" } }, // Ajouter l'année de la date
-                    month: { $month: { $toDate: "$date" } } // Ajouter le mois de la date
+                    employee: { $arrayElemAt: ["$employee", 0] }
                 }
             }
         ];
 
-        // Construire le filtre pour les mois et/ou années définis
         const filter = {};
         if (mois !== undefined) {
             if (mois.toString() != "") {
@@ -57,59 +83,13 @@ class StatistiqueService {
             }
         }
 
-        // Ajouter le filtre au pipeline s'il y a des filtres définis
         if (Object.keys(filter).length > 0) {
             pipeline.push({ $match: filter });
         }
 
         pipeline.push({ $sort: { 'date': -1 } });
 
-        // const resultats = await RendezVousEmploye.aggregate([
-        //     {
-        //         $group: {
-        //             _id: {
-        //                 date: { $dateToString: { format: "%Y-%m", date: "$date" } },
-        //                 employe: "$idEmploye"
-        //             },
-        //             totalHours: {
-        //                 $sum: {
-        //                     $divide: [{ $subtract: ["$endTime", "$startTime"] }, 3600000] 
-        //                 }
-        //             }
-        //         }
-        //     },
-        //     {
-        //         $project: {
-        //             date: "$_id.date",
-        //             employe: "$_id.employe",
-        //             totalHours: 1,
-        //             _id: 0
-        //         }
-        //     },
-        //     {
-        //         $addFields: {
-        //             year: { $year: { $toDate: "$date" } }, // Ajouter l'année de la date
-        //             month: { $month: { $toDate: "$date" } } // Ajouter le mois de la date
-        //         }
-        //     }
-        // ]);
-    const resultatsBruts = await RendezVousEmploye.aggregate([
-    {
-        $project: {
-            date: 1,
-            idEmploye: 1,
-            heureTravail: {
-                    $divide: [{ $subtract: ["$endTime", "$startTime"] }, 3600000]
-            },
-            _id: 0
-        }
-    }
-]);
-
-// Maintenant, vous pouvez peupler les références
-const resultats = await RendezVousEmploye.populate(resultatsBruts, { path: "idEmploye" });
-
-// resultatsPeuples contiendra les résultats peuplés
+        const resultats = await RendezVousEmploye.aggregate(pipeline);
 
 
         return resultats;
