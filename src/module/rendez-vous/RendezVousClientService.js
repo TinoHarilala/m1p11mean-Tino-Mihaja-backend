@@ -245,7 +245,10 @@ class RendezVousClientService {
          try {
             const service = await Service.findById({ _id: idService });
             const finService = new Date(dateTime);
-
+             
+            if (service == null) {
+                throw new Error("Ce service n'existe pas");  
+            }
             if (service.duree < 1) {
                 finService.setMinutes(finService.getMinutes() + 30);
             } else {
@@ -287,9 +290,18 @@ class RendezVousClientService {
 
             if (verify) {
                 if (preference.length != 0) {
-                    const free = await this.verificationFree(preference[0].employe, dateTime, idService);
-                    if (free) {
-                        this.assignation(preference[0].employe, rendezVousClient, remise);
+                    let boolean = false;
+                    let empPref = {};
+                    for (const p of preference) {
+                        const free = await this.verificationFree(p.employe, dateTime, idService);
+                        if (free) {
+                            boolean = true;
+                            empPref = p.employe;
+                            break;
+                        }
+                    }
+                    if (boolean) {
+                        this.assignation(empPref, rendezVousClient, remise);
 
                     } else {
                         const freeEmp = await this.getFreeEmploye(idService, dateTime);
@@ -303,6 +315,7 @@ class RendezVousClientService {
             }
 
         } catch (error) {
+            console.log(error);
             throw error;
         }
     }
