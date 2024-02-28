@@ -38,6 +38,14 @@ class RendezVousClientService {
                                 existEmp.push(employe._id);
                                 nbEmp++;
 
+                                if (nbEmp == employes.length) {
+                                    const resultat = {
+                                            "startTime": debutIntersection,
+                                            "endTime": finIntersection
+                                        }
+                                    resultats.push(resultat);
+                                }
+
                             } else if (debutIntersection <= fin2 && finIntersection >= debut2) {
                                 debutIntersection = debutIntersection > debut2 ? debutIntersection : debut2;
                                 finIntersection = finIntersection < fin2 ? finIntersection : fin2;
