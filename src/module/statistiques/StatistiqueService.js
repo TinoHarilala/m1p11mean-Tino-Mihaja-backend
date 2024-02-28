@@ -117,7 +117,8 @@ class StatistiqueService {
             {
                 $addFields: {
                     year: { $year: { $toDate: "$date" } },
-                    month: { $month: { $toDate: "$date" } } 
+                    month: { $month: { $toDate: "$date" } },
+                    day: { $dayOfMonth: { $toDate: "$date" } }
                 }
             }
         ];
@@ -166,7 +167,8 @@ class StatistiqueService {
             {
                 $addFields: {
                     year: { $year: { $toDate: "$date" } },
-                    month: { $month: { $toDate: "$date" } } 
+                    month: { $month: { $toDate: "$date" } },
+                    day: { $dayOfMonth: { $toDate: "$date" } }
                 }
             }
         ];
