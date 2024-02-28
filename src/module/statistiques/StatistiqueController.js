@@ -28,9 +28,31 @@ class StatistiqueController {
         }
     }
 
+    async reservationParMois(req, res) {
+        try {
+            const reservationParJourMois = await statistiqueService.reservationParMois(req.query.annee);
+
+            res.status(200).json({ reservationParJourMois: reservationParJourMois });
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({error: error.message});
+        }
+    }
+
     async chiffreAffaire(req, res) {
         try {
             const chiffreAffaire = await statistiqueService.chiffreAffaire(req.query.mois, req.query.annee);
+
+            res.status(200).json({ chiffreAffaire: chiffreAffaire });
+        } catch (error) {
+            console.log(error);
+            res.status(401).json({error: error.message});
+        }
+    }
+
+    async chiffreAffaireParMois(req, res) {
+        try {
+            const chiffreAffaire = await statistiqueService.chiffreAffaireParMois(req.query.annee);
 
             res.status(200).json({ chiffreAffaire: chiffreAffaire });
         } catch (error) {

@@ -146,6 +146,51 @@ class StatistiqueService {
         return resultats;
     }
 
+    async reservationParMois(annee) {
+        
+        const pipeline = [
+            {
+                $group: {
+                    _id: {
+                        date: { $dateToString: { format: "%Y-%m", date: "$dateTime" } }
+                    },
+                    count: { $sum: 1 } 
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    date: "$_id.date",
+                    count: 1
+                }
+            },
+            {
+                $addFields: {
+                    year: { $year: { $toDate: "$date" } },
+                    month: { $month: { $toDate: "$date" } }
+                }
+            }
+        ];
+
+        const filter = {};
+
+        if (annee !== undefined) {
+            if (annee.toString() != "") {
+                filter.year = parseInt(annee);
+            }
+        }
+
+        if (Object.keys(filter).length > 0) {
+            pipeline.push({ $match: filter });
+        }
+
+        pipeline.push({ $sort: { 'date': 1 } });
+
+        const resultats = await RendezVousClient.aggregate(pipeline);
+
+        return resultats;
+    }
+
     async chiffreAffaire( mois, annee) {
         
         const pipeline = [
@@ -179,6 +224,51 @@ class StatistiqueService {
                 filter.month = parseInt(mois);
             }
         }
+        if (annee !== undefined) {
+            if (annee.toString() != "") {
+                filter.year = parseInt(annee);
+            }
+        }
+
+        if (Object.keys(filter).length > 0) {
+            pipeline.push({ $match: filter });
+        }
+
+        pipeline.push({ $sort: { 'date': 1 } });
+
+        const resultats = await CompteSociete.aggregate(pipeline);
+
+        return resultats;
+    }
+
+    async chiffreAffaireParMois(annee) {
+        
+        const pipeline = [
+            {
+                $group: {
+                    _id: {
+                        date: { $dateToString: { format: "%Y-%m", date: "$date" } }
+                    },
+                    total: { $sum: "$montant" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    date: "$_id.date",
+                    total: 1
+                }
+            },
+            {
+                $addFields: {
+                    year: { $year: { $toDate: "$date" } },
+                    month: { $month: { $toDate: "$date" } }
+                }
+            }
+        ];
+
+        const filter = {};
+        
         if (annee !== undefined) {
             if (annee.toString() != "") {
                 filter.year = parseInt(annee);
