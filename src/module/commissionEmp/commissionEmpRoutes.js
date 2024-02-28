@@ -1,5 +1,5 @@
 var express = require('express');
-const CommissionEmpController = require('./commissionEmpController');
+const CommissionEmpController = require('./CommissionEmpController');
 var router = express.Router();
 
 const commissionEmpController = new CommissionEmpController();

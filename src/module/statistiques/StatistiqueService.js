@@ -222,6 +222,9 @@ class StatistiqueService {
 
         const depenses = await Depense.aggregate([
             {
+                $match: {"isDeleted": 0}
+            },
+            {
                 $group: {
                     _id: {
                         date: { $dateToString: { format: "%Y-%m", date: "$date" } }
