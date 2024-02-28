@@ -10,7 +10,7 @@ const errorHandler = require('../middleware/ErrorHandler');
 const middleware = new Middleware();
 
 app.use(cors());
-app.use("/", routes);
+app.use("/",middleware.checking, routes);
 app.use(errorHandler); // Error handler middleware
 app.use(bodyParser.raw({ type: "application/octet-stream" }));
 
