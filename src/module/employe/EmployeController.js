@@ -22,6 +22,7 @@ class EmployeController {
 
             res.status(200).json({ token: token, employe: employe });
         } catch (error) {
+            console.log(error);
             res.status(401).json({ error: error.message });
         }
     }

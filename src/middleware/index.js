@@ -4,9 +4,9 @@ const secret_code = "banane";
 
 class Middleware {
     checkToken(req, token) {
-      if (req.originalUrl !== "/login" &&
-        req.originalUrl !== "/registration" && 
-        req.originalUrl !== "/login.employe")
+      if (req.originalUrl !== "/api/login" &&
+        req.originalUrl !== "/api/registration" && 
+        req.originalUrl !== "/api/login.employe")
       {
           if (!token) {
               throw new Error("Session expired");

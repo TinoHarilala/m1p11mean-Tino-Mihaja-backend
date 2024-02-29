@@ -1,0 +1,19 @@
+# Ignore les répertoires node_modules
+node_modules/
+
+# Ignorer les fichiers de configuration locaux
+.env
+
+# Ignorer les fichiers de dépendances natives compilés
+/build/
+
+# Ignorer les fichiers de sauvegarde générés par l'éditeur
+.vscode/
+*.sublime-workspace
+
+# Ignorer les fichiers de journalisation
+logs/
+*.log
+
+# Ignorer les fichiers de sortie de compilation
+*.out
